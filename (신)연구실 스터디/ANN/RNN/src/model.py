@@ -23,12 +23,14 @@ class RNN(nn.Module):
         # RNN returns output and hidden state
         self.fc = nn.Sequential(nn.Linear(hidden_size * seq_length, 1), nn.Sigmoid())
         # It it is classification distinguishing negative or positive, the activation function should be softmax
-        #self.fc = nn.Linear(128, num_classes)
+
         
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size()[0], self.hidden_size).to(device) # 초기 hidden state 설정하기.
-        out, _ = self.rnn(x, h0) # out: RNN의 마지막 레이어로부터 나온 output feature 를 반환한다. hn: hidden state를 반환한다.
-        out = out.reshape(out.shape[0], -1) # many to many 전략
+        out, hn = self.rnn(x, h0) # out: RNN의 마지막 레이어로부터 나온 output feature 를 반환한다. hn: hidden state를 반환한다.
+        print("Output Shape : ", out.shape)
+        print("Hidden Shape : ", hn.shape)
+        out = out.reshape(out.shape[0], -1) 
         out = self.fc(out)
         
         return out

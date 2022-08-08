@@ -7,8 +7,8 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 class TensorData(Dataset):
     def __init__(self, x_data, y_data):
-        self.x_data = torch.FloatTensor(x_data).to(device) #들어온 데이터를 텐서로 
-        self.y_data = torch.FloatTensor(y_data).to(device)  #들어온 데이터를 텐서로 
+        self.x_data = torch.FloatTensor(x_data)#들어온 데이터를 텐서로 
+        self.y_data = torch.FloatTensor(y_data)  #들어온 데이터를 텐서로 
         self.len = self.y_data.shape[0]
         
     def __getitem__ (self, index): #
@@ -23,4 +23,4 @@ def make_sequence_data(feature, label, window_size, predict_size):
     for i in range(len(feature)-window_size-predict_size+1):
         feature_list.append(feature[i:i+window_size])
         label_list.append(label[i+window_size:i+window_size+predict_size]) 
-    return torch.FloatTensor(feature_list), torch.FloatTensor(label_list).to(device).view([-1, 1])
+    return np.array(feature_list), np.array(label_list)
